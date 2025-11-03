@@ -77,6 +77,13 @@ WSGI_APPLICATION = 'estudiantes_project.wsgi.application'
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
+# Database configuration mejorada para Docker
+POSTGRES_DB = os.environ.get('POSTGRES_DB', 'estudiantes_db')
+POSTGRES_USER = os.environ.get('POSTGRES_USER', 'estudaintes_user')
+POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', '123456')
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'localhost')
+POSTGRES_PORT = os.environ.get('POSTGRES_PORT', '5432')
+
 if DATABASE_URL:
     # Configuración para GitHub Actions o producción
 
@@ -139,3 +146,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuración para archivos estáticos en producción/Docker
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
+# Configuración adicional para Docker
+if os.environ.get('DOCKER_CONTAINER'):
+    ALLOWED_HOSTS = ['*']
+    DEBUG = os.environ.get('DEBUG', 'False') == 'True'
