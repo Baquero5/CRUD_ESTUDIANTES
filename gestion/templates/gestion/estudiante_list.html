@@ -1,0 +1,92 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Lista de Estudiantes{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2><i class="bi bi-people"></i> Lista de Estudiantes</h2>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{% url 'estudiante_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nuevo Estudiante
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-10">
+                <input type="text" name="q" class="form-control" placeholder="Buscar por nombre, apellido, cédula o email..." value="{{ query|default:'' }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary w-100">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if estudiantes %}
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Cédula</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Carrera</th>
+                        <th>Semestre</th>
+                        <th>Promedio</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estudiante in estudiantes %}
+                    <tr>
+                        <td>{{ estudiante.cedula }}</td>
+                        <td>{{ estudiante.nombres }}</td>
+                        <td>{{ estudiante.apellidos }}</td>
+                        <td>{{ estudiante.email }}</td>
+                        <td>{{ estudiante.get_carrera_display }}</td>
+                        <td>{{ estudiante.semestre }}</td>
+                        <td>{{ estudiante.promedio }}</td>
+                        <td>
+                            {% if estudiante.activo %}
+                                <span class="badge bg-success">Activo</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inactivo</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'estudiante_detail' estudiante.pk %}" class="btn btn-sm btn-info" title="Ver detalle">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'estudiante_update' estudiante.pk %}" class="btn btn-sm btn-warning" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'estudiante_delete' estudiante.pk %}" class="btn btn-sm btn-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="text-muted mt-3">Total de estudiantes: {{ estudiantes.count }}</p>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> No hay estudiantes registrados. 
+    <a href="{% url 'estudiante_create' %}">¡Crea uno ahora!</a>
+</div>
+{% endif %}
+{% endblock %}

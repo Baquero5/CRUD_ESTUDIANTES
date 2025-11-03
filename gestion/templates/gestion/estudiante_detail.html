@@ -1,0 +1,103 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Detalle del Estudiante{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-person-badge"></i> Detalle del Estudiante
+                </h4>
+                <div>
+                    {% if estudiante.activo %}
+                        <span class="badge bg-success">Activo</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inactivo</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Cédula</h6>
+                        <p class="fs-5">{{ estudiante.cedula }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Email</h6>
+                        <p class="fs-5">{{ estudiante.email }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Nombres</h6>
+                        <p class="fs-5">{{ estudiante.nombres }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Apellidos</h6>
+                        <p class="fs-5">{{ estudiante.apellidos }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Fecha de Nacimiento</h6>
+                        <p class="fs-5">{{ estudiante.fecha_nacimiento|date:"d/m/Y" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Carrera</h6>
+                        <p class="fs-5">{{ estudiante.get_carrera_display }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Semestre</h6>
+                        <p class="fs-5">{{ estudiante.semestre }}º Semestre</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Promedio</h6>
+                        <p class="fs-5">
+                            {{ estudiante.promedio }}
+                            {% if estudiante.promedio >= 7 %}
+                                <span class="badge bg-success">Excelente</span>
+                            {% elif estudiante.promedio >= 5 %}
+                                <span class="badge bg-warning">Bueno</span>
+                            {% else %}
+                                <span class="badge bg-danger">Necesita mejorar</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Fecha de Registro</h6>
+                        <p>{{ estudiante.fecha_registro|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Última Actualización</h6>
+                        <p>{{ estudiante.fecha_actualizacion|date:"d/m/Y H:i" }}</p>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'estudiante_list' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                    <a href="{% url 'estudiante_update' estudiante.pk %}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'estudiante_delete' estudiante.pk %}" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
